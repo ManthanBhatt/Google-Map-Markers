@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <title>Simple Map</title>
+    <style>
+        #map {
+            height: 100%;
+        }
+        
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="googleMap" style="width:100%;height:400px;"></div>
+</body>
+<script>
+    function myMap() {
+        const locations = [
+            ['$20', -33.890542, 151.274856, 4, 'Location 1'],
+            ['$50', -33.923036, 151.259052, 5, 'Location 2'],
+            ['$30', -34.028249, 151.157507, 3, 'Location 3'],
+            ['$60', -33.80010128657071, 151.28747820854187, 2, 'Location 4'],
+            ['$55', -33.950198, 151.259302, 1, 'Location 5']
+        ];
+
+        const map = new google.maps.Map(document.getElementById('googleMap'), {
+            zoom: 10,
+            center: new google.maps.LatLng(-33.92, 151.25),
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        const infowindow = new google.maps.InfoWindow();
+
+        let marker, i;
+
+        for (i = 0; i < locations.length; i++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                label: {
+                    text: locations[i][0],
+                    fontSize: "16px"
+                },
+                map: map,
+                icon: {
+                    url: './hotel.png',
+                    scaledSize: new google.maps.Size(34, 34),
+                    labelOrigin: new google.maps.Point(50, 15)
+                }
+            });
+
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                    infowindow.setContent(locations[i][4]);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+        }
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=myMap&v=weekly"></script>
+
+</html>
